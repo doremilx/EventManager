@@ -31,6 +31,7 @@
     </div>
   </header>
   <main class="events-main">
+    @include('partials/flash_alerts')
     <section class="events-hero">
       <div>
         <span class="tag events-kicker">Agenda communautaire</span>
@@ -52,9 +53,9 @@
         <span class="tag">À l’affiche</span>
         <h2>Les prochains événements</h2>
       </div>
-      <span class="events-count">{{ events.length }} rendez-vous</span>
+      <span class="events-count">{{ eventCards.length }} rendez-vous</span>
     </div>
-    @if(events.length === 0)
+    @if(eventCards.length === 0)
       <div class="events-empty">
         <div class="events-empty__icon">✦</div>
         <h3>La programmation commence ici</h3>
@@ -67,7 +68,8 @@
       </div>
     @else
       <div class="events-grid">
-        @each(event in events)
+        @each(card in eventCards)
+          @let(event = card.event)
           <article class="event-card">
             <div class="event-card__top">
               <span class="event-card__category">{{ event.category }}</span>
@@ -80,9 +82,32 @@
               <span><strong>⌖</strong> {{ event.location }}</span>
             </div>
             <div class="event-card__footer">
-              <span>{{ event.maxCapacity }} places disponibles</span>
+              <span>{{ card.registrationCount }} / {{ event.maxCapacity }} participant{{ card.registrationCount > 1 ? 's' : '' }}</span>
               <span class="event-card__line"></span>
             </div>
+            @if(card.participantNames.length > 0)
+              <div class="event-card__participants">
+                <span class="event-card__participants-label">Inscrits</span>
+                <span>{{ card.participantNames.join(', ') }}</span>
+              </div>
+            @endif
+            @if(auth.user)
+              @if(card.isRegistered)
+                @form({ route: 'events.unregister', routeParams: { id: event.id }, method: 'POST' })
+                  <button type="submit" class="btn btn--secondary btn--sm event-card__registration">Se désinscrire</button>
+                @end
+              @elseif(card.registrationCount >= event.maxCapacity)
+                <span class="event-card__registration event-card__registration--full">Événement complet</span>
+              @else
+                @form({ route: 'events.register', routeParams: { id: event.id }, method: 'POST' })
+                  <button type="submit" class="btn btn--secondary btn--sm event-card__registration">S’inscrire</button>
+                @end
+              @end
+            @else
+              @link({ route: 'session.create', class: 'btn btn--secondary btn--sm event-card__registration' })
+                Se connecter pour s’inscrire
+              @end
+            @end
           </article>
         @end
       </div>

@@ -14,6 +14,8 @@ export type ScannedRoutes = {
     'events.index': { paramsTuple?: []; params?: {} }
     'events.create': { paramsTuple?: []; params?: {} }
     'events.store': { paramsTuple?: []; params?: {} }
+    'events.register': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'events.unregister': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -36,6 +38,8 @@ export type ScannedRoutes = {
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'events.store': { paramsTuple?: []; params?: {} }
+    'events.register': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'events.unregister': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

@@ -7,6 +7,21 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class EventRegistrationSchema extends BaseModel {
+  static $columns = ['createdAt', 'eventId', 'id', 'updatedAt', 'userId'] as const
+  $columns = EventRegistrationSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare eventId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class EventSchema extends BaseModel {
   static $columns = [
     'category',

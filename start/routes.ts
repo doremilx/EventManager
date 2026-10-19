@@ -40,5 +40,11 @@ router
     router.get('/events/create', [controllers.Events, 'create']).as('events.create')
     // Enregistrer le nouvel événement
     router.post('/events', [controllers.Events, 'store']).as('events.store')
+    // Inscrire l'utilisateur connecté à un événement
+    router.post('/events/:id/register', [controllers.Events, 'register']).as('events.register')
+    // Désinscrire l'utilisateur connecté d'un événement
+    router
+      .post('/events/:id/unregister', [controllers.Events, 'unregister'])
+      .as('events.unregister')
   })
   .use(middleware.auth())
