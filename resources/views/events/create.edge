@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="{{
+  request.plainCookie('app_theme', {
+    defaultValue: 'light',
+    encoded: false,
+  })
+}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un événement — Evently</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="events-page">
+  <header class="events-header">
+    <a href="{{ route('events.index') }}" class="events-brand">
+      <span class="events-brand__mark">✦</span>
+      <span>evently</span>
+    </a>
+    <div class="events-header__actions">
+      @!themeToggle()
+      @link({ route: 'events.index', class: 'btn btn--ghost btn--sm' })
+        ← Tous les événements
+      @end
+    </div>
+  </header>
+  <main class="create-main">
+    <div class="create-intro">
+      <span class="tag events-kicker">Nouvelle rencontre</span>
+      <h1>Donnez vie à<br><em>votre événement.</em></h1>
+      <p>Partagez une idée, une passion ou un moment avec votre communauté.</p>
+    </div>
+    <section class="create-card">
+      <div class="create-card__header">
+        <span class="create-card__step">01</span>
+        <div>
+          <h2>Les informations essentielles</h2>
+          <p>Quelques détails pour aider les participants à se projeter.</p>
+        </div>
+      </div>
+      @form({ route: 'events.store', method: 'POST' })
+        <div class="event-form-grid">
+          <div class="event-field event-field--wide">
+            <label for="title">Titre de l’événement</label>
+            <input id="title" type="text" name="title" placeholder="Ex. Atelier céramique" required>
+          </div>
+          <div class="event-field">
+            <label for="category">Catégorie</label>
+            <input id="category" type="text" name="category" placeholder="Ex. Créatif" required>
+          </div>
+          <div class="event-field">
+            <label for="location">Lieu</label>
+            <input id="location" type="text" name="location" placeholder="Ex. Paris, France" required>
+          </div>
+          <div class="event-field event-field--wide">
+            <label for="description">Description <span>(optionnel)</span></label>
+            <textarea id="description" name="description" rows="4" placeholder="Présentez votre événement en quelques mots..."></textarea>
+          </div>
+          <div class="event-field">
+            <label for="eventDate">Date et heure</label>
+            <input id="eventDate" type="datetime-local" name="eventDate" required>
+          </div>
+          <div class="event-field">
+            <label for="maxCapacity">Capacité maximum</label>
+            <input id="maxCapacity" type="number" name="maxCapacity" min="1" placeholder="Ex. 30" required>
+          </div>
+        </div>
+        <div class="create-card__footer">
+          <span class="create-card__hint">Les champs marqués sont nécessaires</span>
+          <button type="submit" class="btn btn--primary">Publier l’événement <span>→</span></button>
+        </div>
+      @end
+    </section>
+  </main>
+</body>
+</html>

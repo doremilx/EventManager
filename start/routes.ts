@@ -29,3 +29,16 @@ router
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())
+
+// 1. Afficher la liste des événements (accessible à tout le monde sur l'accueil ou une page dédiée)
+router.get('/events', [controllers.Events, 'index']).as('events.index')
+
+// 2. Routes protégées (nécessite d'être connecté pour créer un événement)
+router
+  .group(() => {
+    // Afficher le formulaire de création
+    router.get('/events/create', [controllers.Events, 'create']).as('events.create')
+    // Enregistrer le nouvel événement
+    router.post('/events', [controllers.Events, 'store']).as('events.store')
+  })
+  .use(middleware.auth())

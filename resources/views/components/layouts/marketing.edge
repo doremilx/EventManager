@@ -21,6 +21,10 @@
         @!logo({ size: 28 })
         <div class="header__right">
           @!themeToggle()
+          @link({ route: 'events.index', class: 'btn btn--primary btn--sm events-access-button' })
+            @svg('lucide:calendar-days', { width: 15, height: 15 })
+            Voir les événements
+          @end
           @if(auth.user)
             @link({ route: 'dashboard', class: 'btn btn--primary btn--sm' })
               Dashboard

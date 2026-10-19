@@ -7,10 +7,11 @@
           404
         </span>
       </div>
-      <div class="pc-lead"><span>Not found.</span> <em>That route hasn't been built yet.</em></div>
-      <p class="pc-para">
-        The page you tried to reach doesn't exist. Check the URL or head back home.
-      </p>
+      <div class="pc-lead"><span>Page introuvable.</span> <em>Cette route n’existe pas encore.</em></div>
+      <p class="pc-para">Vérifie l’adresse ou retourne à l’accueil.</p>
+      @link({ route: 'home', class: 'btn btn--primary', style: 'margin-top: 20px;' })
+        Retour à l’accueil
+      @end
     </article>
   </div>
 @end

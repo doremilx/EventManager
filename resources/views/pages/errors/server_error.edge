@@ -7,13 +7,11 @@
           {{ error.code || 500 }}
         </span>
       </div>
-      <div class="pc-lead">
-        <span>Something broke.</span>
-        <em>The server hit an unexpected error.</em>
-      </div>
-      <p class="pc-para">
-        Try again in a moment. If the problem persists, check the server logs for the underlying exception.
-      </p>
+      <div class="pc-lead"><span>Une erreur est survenue.</span> <em>Le serveur a rencontré un problème.</em></div>
+      <p class="pc-para">Réessaie dans quelques instants ou retourne à l’accueil.</p>
+      @link({ route: 'home', class: 'btn btn--primary', style: 'margin-top: 20px;' })
+        Retour à l’accueil
+      @end
     </article>
   </div>
 @end

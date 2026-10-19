@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="{{
+  request.plainCookie('app_theme', {
+    defaultValue: 'light',
+    encoded: false,
+  })
+}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Événements — Evently</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="events-page">
+  <header class="events-header">
+    <a href="{{ route('home') }}" class="events-brand">
+      <span class="events-brand__mark">✦</span>
+      <span>evently</span>
+    </a>
+    <div class="events-header__actions">
+      @!themeToggle()
+      @if(auth.user)
+        @link({ route: 'dashboard', class: 'btn btn--secondary btn--sm' })
+          Tableau de bord
+        @end
+      @else
+        @link({ route: 'session.create', class: 'btn btn--ghost btn--sm' })
+          Se connecter
+        @end
+      @end
+    </div>
+  </header>
+  <main class="events-main">
+    <section class="events-hero">
+      <div>
+        <span class="tag events-kicker">Agenda communautaire</span>
+        <h1>Des moments à<br><em>ne pas manquer.</em></h1>
+        <p>Découvrez les prochains rendez-vous et trouvez l’événement qui vous ressemble.</p>
+      </div>
+      @if(auth.user)
+        @link({ route: 'events.create', class: 'btn btn--primary events-hero__button' })
+          <span class="events-button-icon">+</span> Créer un événement
+        @end
+      @else
+        @link({ route: 'session.create', class: 'btn btn--primary events-hero__button' })
+          Rejoindre evently <span>→</span>
+        @end
+      @end
+    </section>
+    <div class="events-list-heading">
+      <div>
+        <span class="tag">À l’affiche</span>
+        <h2>Les prochains événements</h2>
+      </div>
+      <span class="events-count">{{ events.length }} rendez-vous</span>
+    </div>
+    @if(events.length === 0)
+      <div class="events-empty">
+        <div class="events-empty__icon">✦</div>
+        <h3>La programmation commence ici</h3>
+        <p>Il n’y a pas encore d’événement. Soyez le premier à proposer une nouvelle expérience.</p>
+        @if(auth.user)
+          @link({ route: 'events.create', class: 'btn btn--secondary' })
+            Proposer un événement
+          @end
+        @end
+      </div>
+    @else
+      <div class="events-grid">
+        @each(event in events)
+          <article class="event-card">
+            <div class="event-card__top">
+              <span class="event-card__category">{{ event.category }}</span>
+              <span class="event-card__arrow">↗</span>
+            </div>
+            <h3>{{ event.title }}</h3>
+            <p class="event-card__description">{{ event.description || 'Une expérience à découvrir et à partager.' }}</p>
+            <div class="event-card__details">
+              <span><strong>◷</strong> {{ event.eventDate }}</span>
+              <span><strong>⌖</strong> {{ event.location }}</span>
+            </div>
+            <div class="event-card__footer">
+              <span>{{ event.maxCapacity }} places disponibles</span>
+              <span class="event-card__line"></span>
+            </div>
+          </article>
+        @end
+      </div>
+    @endif
+  </main>
+</body>
+</html>

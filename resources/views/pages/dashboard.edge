@@ -1,17 +1,17 @@
-@layouts.app({ title: 'Dashboard' })
+@layouts.app({ title: 'Tableau de bord' })
   @page()
     <div class="empty">
       <div class="empty__mark">
-        @svg('lucide:layout-grid', { width: 22, height: 22 })
+        @svg('lucide:calendar-days', { width: 22, height: 22 })
       </div>
-      <h1>Your dashboard is ready</h1>
+      <h1>Votre tableau de bord</h1>
       <p>
-        It's empty on purpose. A clean starting point with nothing to undo. Add your first route and component to begin.
+        Retrouvez vos événements et accédez rapidement à l’agenda de la communauté.
       </p>
-      <p class="mono" style="font-size: 12.5px; color: var(--subtle); margin-top: 4px;">
-        Start in
-        <span class="kbd">resources/views/pages/dashboard.edge</span>
-      </p>
+      @link({ route: 'events.index', class: 'btn btn--primary events-access-button' })
+        @svg('lucide:calendar-days', { width: 16, height: 16 })
+        Voir les événements
+      @end
     </div>
   @end
 @end
