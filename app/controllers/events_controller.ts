@@ -2,8 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Event from '#models/event'
 import EventRegistration from '#models/event_registration'
 import { eventValidator } from '#validators/event'
+import { transformEventData } from '#transformers/event_transformer'
 import db from '@adonisjs/lucid/services/db'
-import { DateTime } from 'luxon'
 
 export default class EventsController {
   // Afficher la liste des événements
@@ -75,14 +75,7 @@ export default class EventsController {
   async store({ request, response }: HttpContext) {
     const data = await request.validateUsing(eventValidator)
 
-    await Event.create({
-      title: data.title,
-      description: data.description,
-      location: data.location,
-      eventDate: DateTime.fromISO(data.eventDate),
-      maxCapacity: data.maxCapacity,
-      category: data.category,
-    })
+    await Event.create(transformEventData(data))
 
     return response.redirect().toRoute('events.index')
   }
