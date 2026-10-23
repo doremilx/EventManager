@@ -2,7 +2,12 @@
   Top-level app navigation. Add an entry here for every new area of your
   app, and it shows up in the navigation bar with its active state handled.
 --}}
-@let(nav = [{ label: 'Tableau de bord', route: 'dashboard', icon: 'lucide:house' }])
+@let(nav = auth.user && auth.user.isAdmin
+  ? [
+      { label: 'Tableau de bord', route: 'dashboard', icon: 'lucide:house' },
+      { label: 'Administration', route: 'admin.index', icon: 'lucide:shield-check' },
+    ]
+  : [{ label: 'Tableau de bord', route: 'dashboard', icon: 'lucide:house' }])
 @let(pageTitle = $props.get('title'))
 <!DOCTYPE html>
 <html

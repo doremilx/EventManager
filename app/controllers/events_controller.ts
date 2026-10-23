@@ -1,15 +1,40 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Event from '#models/event'
 import EventRegistration from '#models/event_registration'
+import { eventValidator } from '#validators/event'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 export default class EventsController {
   // Afficher la liste des événements
-  async index({ view, auth }: HttpContext) {
-    const events = await Event.query()
+  async index({ view, auth, request }: HttpContext) {
+    const category = request.input('category')
+    const date = request.input('date')
+    const search = request.input('search')
+    const categories = await Event.query().select('category').distinct().orderBy('category', 'asc')
+    const eventsQuery = Event.query()
       .preload('registrations', (registrationQuery) => registrationQuery.preload('user'))
       .withCount('registrations')
+
+    if (category) {
+      eventsQuery.where('category', category)
+    }
+
+    if (date) {
+      eventsQuery.whereRaw('date(event_date) = ?', [date])
+    }
+
+    if (search) {
+      eventsQuery.where((query) => {
+        query
+          .whereILike('title', `%${search}%`)
+          .orWhereILike('description', `%${search}%`)
+          .orWhereILike('location', `%${search}%`)
+          .orWhereILike('category', `%${search}%`)
+      })
+    }
+
+    const events = await eventsQuery
     const registeredEventIds = new Set<number>()
 
     if (auth.user) {
@@ -26,9 +51,19 @@ export default class EventsController {
       participantNames: event.registrations.map(
         (registration) => registration.user.fullName || 'Participant'
       ),
+      participants: event.registrations.map((registration) => ({
+        id: registration.id,
+        name: registration.user.fullName || 'Participant',
+      })),
     }))
 
-    return view.render('events/index', { eventCards })
+    return view.render('events/index', {
+      eventCards,
+      categories: categories.map((event) => event.category),
+      selectedCategory: category,
+      selectedDate: date,
+      search,
+    })
   }
 
   // Afficher le formulaire
@@ -38,22 +73,14 @@ export default class EventsController {
 
   // Enregistrer un événement
   async store({ request, response }: HttpContext) {
-    const data = request.only([
-      'title',
-      'description',
-      'location',
-      'eventDate',
-      'maxCapacity',
-      'category',
-    ])
+    const data = await request.validateUsing(eventValidator)
 
-    // 2. On crée l'événement en convertissant proprement les types
     await Event.create({
       title: data.title,
       description: data.description,
       location: data.location,
-      eventDate: DateTime.fromISO(data.eventDate), // Conversion de la date HTML en DateTime
-      maxCapacity: Number(data.maxCapacity), // S'assure que c'est bien un nombre
+      eventDate: DateTime.fromISO(data.eventDate),
+      maxCapacity: data.maxCapacity,
       category: data.category,
     })
 
@@ -143,6 +170,55 @@ export default class EventsController {
     await registration.delete()
 
     session.flash('success', 'Vous êtes désinscrit de cet événement.')
+    return response.redirect().toRoute('events.index')
+  }
+
+  async destroyRegistration({ request, response, session }: HttpContext) {
+    const eventId = Number(request.param('id'))
+    const registrationId = Number(request.param('registrationId'))
+
+    if (
+      !Number.isInteger(eventId) ||
+      eventId < 1 ||
+      !Number.isInteger(registrationId) ||
+      registrationId < 1
+    ) {
+      session.flash('error', 'Cette inscription est invalide.')
+      return response.redirect().toRoute('events.index')
+    }
+
+    const registration = await EventRegistration.query()
+      .where('id', registrationId)
+      .where('eventId', eventId)
+      .first()
+
+    if (!registration) {
+      session.flash('error', 'Cette inscription n’existe plus.')
+      return response.redirect().toRoute('events.index')
+    }
+
+    await registration.delete()
+    session.flash('success', 'L’inscription a été supprimée.')
+    return response.redirect().toRoute('events.index')
+  }
+
+  async destroy({ request, response, session }: HttpContext) {
+    const eventId = Number(request.param('id'))
+
+    if (!Number.isInteger(eventId) || eventId < 1) {
+      session.flash('error', 'Cet événement est invalide.')
+      return response.redirect().toRoute('events.index')
+    }
+
+    const event = await Event.find(eventId)
+
+    if (!event) {
+      session.flash('error', 'Cet événement n’existe plus.')
+      return response.redirect().toRoute('events.index')
+    }
+
+    await event.delete()
+    session.flash('success', 'L’événement a été supprimé.')
     return response.redirect().toRoute('events.index')
   }
 }

@@ -8,14 +8,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Événements — Evently</title>
+  <title>Événements — Event Manager</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="events-page">
   <header class="events-header">
     <a href="{{ route('home') }}" class="events-brand">
       <span class="events-brand__mark">✦</span>
-      <span>evently</span>
+      <span>Event Manager</span>
     </a>
     <div class="events-header__actions">
       @!themeToggle()
@@ -44,7 +44,7 @@
         @end
       @else
         @link({ route: 'session.create', class: 'btn btn--primary events-hero__button' })
-          Rejoindre evently <span>→</span>
+          Rejoindre Event Manager <span>→</span>
         @end
       @end
     </section>
@@ -55,11 +55,44 @@
       </div>
       <span class="events-count">{{ eventCards.length }} rendez-vous</span>
     </div>
+    <form method="GET" action="{{ route('events.index') }}" class="events-filters">
+      <div class="events-filter events-filter--search">
+        <label for="search">Rechercher</label>
+        <input
+          id="search"
+          type="search"
+          name="search"
+          value="{{ search || '' }}"
+          placeholder="Titre, lieu, catégorie..."
+        >
+      </div>
+      <div class="events-filter">
+        <label for="category">Catégorie</label>
+        <select id="category" name="category">
+          <option value="">Toutes les catégories</option>
+          @each(category in categories)
+            <option value="{{ category }}" {{ selectedCategory === category ? 'selected' : '' }}>
+              {{ category }}
+            </option>
+          @end
+        </select>
+      </div>
+      <div class="events-filter">
+        <label for="date">Date</label>
+        <input id="date" type="date" name="date" value="{{ selectedDate || '' }}">
+      </div>
+      <button type="submit" class="btn btn--secondary btn--sm">Filtrer</button>
+      @if(search || selectedCategory || selectedDate)
+        @link({ route: 'events.index', class: 'btn btn--ghost btn--sm' })
+          Réinitialiser
+        @end
+      @endif
+    </form>
     @if(eventCards.length === 0)
       <div class="events-empty">
         <div class="events-empty__icon">✦</div>
-        <h3>La programmation commence ici</h3>
-        <p>Il n’y a pas encore d’événement. Soyez le premier à proposer une nouvelle expérience.</p>
+        <h3>Aucun événement trouvé</h3>
+        <p>Modifiez vos filtres ou soyez le premier à proposer une nouvelle expérience.</p>
         @if(auth.user)
           @link({ route: 'events.create', class: 'btn btn--secondary' })
             Proposer un événement
@@ -89,6 +122,24 @@
               <div class="event-card__participants">
                 <span class="event-card__participants-label">Inscrits</span>
                 <span>{{ card.participantNames.join(', ') }}</span>
+              </div>
+            @endif
+            @if(auth.user && auth.user.isAdmin)
+              <div class="event-card__admin-actions">
+                @each(participant in card.participants)
+                  @form({
+                    route: 'events.registrations.destroy',
+                    routeParams: { id: event.id, registrationId: participant.id },
+                    method: 'POST'
+                  })
+                    <button type="submit" class="btn btn--ghost btn--sm">
+                      Retirer {{ participant.name }}
+                    </button>
+                  @end
+                @end
+                @form({ route: 'events.destroy', routeParams: { id: event.id }, method: 'POST' })
+                  <button type="submit" class="btn btn--ghost btn--sm">Supprimer l’événement</button>
+                @end
               </div>
             @endif
             @if(auth.user)

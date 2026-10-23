@@ -807,6 +807,190 @@ input {
   color: var(--muted);
   font-size: 14.5px;
   line-height: 1.55;
+}
+
+/* --- admin users table --- */
+.admin-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.admin-eyebrow {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: var(--subtle);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.admin-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.admin-header p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+.admin-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 11px 15px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13px;
+}
+.admin-summary strong {
+  color: var(--ink);
+  font-size: 21px;
+  letter-spacing: -0.04em;
+}
+.admin-panel {
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+.admin-panel__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-panel__top h2 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.admin-panel__top p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.admin-panel__count {
+  color: var(--subtle);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.admin-table-wrap {
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+.admin-table th {
+  padding: 12px 24px;
+  background: color-mix(in oklab, var(--paper) 55%, var(--card));
+  color: var(--subtle);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.admin-table td {
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
+}
+.admin-table tbody tr {
+  transition: background 0.15s;
+}
+.admin-table tbody tr:hover {
+  background: color-mix(in oklab, var(--paper) 45%, var(--card));
+}
+.admin-table__actions-heading {
+  text-align: right;
+}
+.admin-user__identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.admin-user__avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--btn-fg);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.admin-user__details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.admin-user__details strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-user__details span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.admin-role--admin {
+  color: var(--ink);
+  font-weight: 500;
+}
+.admin-role__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--subtle);
+}
+.admin-role--admin .admin-role__dot {
+  background: var(--ok);
+}
+.admin-user__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.admin-user__current {
+  color: var(--subtle);
+  font-size: 13px;
+  font-style: italic;
+}
+.btn--danger {
+  color: #b42318;
+}
+.btn--danger:hover {
+  background: color-mix(in oklab, #b42318 8%, var(--card));
+}
+.admin-empty {
+  padding: 48px 24px;
+  color: var(--muted);
+  text-align: center;
   text-wrap: pretty;
 }
 .kbd {
@@ -928,7 +1112,7 @@ input {
   }
 }
 
-/* Evently */
+/* Event Manager */
 .events-page {
   min-height: 100vh;
   background:
@@ -1181,6 +1365,49 @@ input {
   max-width: 400px;
   margin: 8px auto 22px;
   color: var(--muted);
+}
+.events-filters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 22px 0 28px;
+  padding: 16px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+.events-filter {
+  display: flex;
+  min-width: 190px;
+  flex-direction: column;
+  gap: 5px;
+}
+.events-filter--search {
+  flex: 1;
+  min-width: 260px;
+}
+.events-filter label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.events-filter select,
+.events-filter input {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+.events-filter select:focus,
+.events-filter input:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--ring);
   font-size: 14px;
 }
 .create-main {

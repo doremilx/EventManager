@@ -30,6 +30,30 @@ router
   })
   .use(middleware.auth())
 
+router
+  .group(() => {
+    router.get('/admin', [controllers.Admin, 'index']).as('admin.index')
+    router
+      .post('/admin/users/:id/toggle-admin', [controllers.Admin, 'toggleAdmin'])
+      .as('admin.users.toggle')
+    router.post('/admin/users/:id/delete', [controllers.Admin, 'destroy']).as('admin.users.destroy')
+  })
+  .use(middleware.auth())
+  .use(middleware.admin())
+
+router
+  .group(() => {
+    router
+      .post('/events/:id/registrations/:registrationId/delete', [
+        controllers.Events,
+        'destroyRegistration',
+      ])
+      .as('events.registrations.destroy')
+    router.post('/events/:id/delete', [controllers.Events, 'destroy']).as('events.destroy')
+  })
+  .use(middleware.auth())
+  .use(middleware.admin())
+
 // 1. Afficher la liste des événements (accessible à tout le monde sur l'accueil ou une page dédiée)
 router.get('/events', [controllers.Events, 'index']).as('events.index')
 

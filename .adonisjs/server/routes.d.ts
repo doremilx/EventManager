@@ -11,6 +11,11 @@ export type ScannedRoutes = {
     'session.store': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
+    'admin.users.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.users.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'events.registrations.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'registrationId': ParamValue} }
+    'events.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'events.index': { paramsTuple?: []; params?: {} }
     'events.create': { paramsTuple?: []; params?: {} }
     'events.store': { paramsTuple?: []; params?: {} }
@@ -22,6 +27,7 @@ export type ScannedRoutes = {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
     'events.index': { paramsTuple?: []; params?: {} }
     'events.create': { paramsTuple?: []; params?: {} }
   }
@@ -30,6 +36,7 @@ export type ScannedRoutes = {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
     'events.index': { paramsTuple?: []; params?: {} }
     'events.create': { paramsTuple?: []; params?: {} }
   }
@@ -37,6 +44,10 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'admin.users.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.users.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'events.registrations.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'registrationId': ParamValue} }
+    'events.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'events.store': { paramsTuple?: []; params?: {} }
     'events.register': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'events.unregister': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

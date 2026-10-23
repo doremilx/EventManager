@@ -1,0 +1,89 @@
+@layouts.app({ title: 'Administration' })
+  @page()
+    <div class="admin-header">
+      <div>
+        <span class="admin-eyebrow">Administration</span>
+        <h1>Gérer les utilisateurs</h1>
+        <p>Attribuez le rôle administrateur ou supprimez les comptes inutiles.</p>
+      </div>
+      <div class="admin-summary">
+        <strong>{{ users.length }}</strong>
+        <span>compte{{ users.length > 1 ? 's' : '' }}</span>
+      </div>
+    </div>
+
+    <section class="admin-panel">
+      <div class="admin-panel__top">
+        <div>
+          <h2>Comptes utilisateurs</h2>
+          <p>Gérez les accès et les permissions de la plateforme.</p>
+        </div>
+        <span class="admin-panel__count">Liste complète</span>
+      </div>
+      @if(users.length === 0)
+        <div class="admin-empty">Aucun utilisateur enregistré.</div>
+      @else
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Rôle</th>
+                <th class="admin-table__actions-heading">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(user in users)
+                <tr>
+                  <td>
+                    <div class="admin-user__identity">
+                      <div class="admin-user__avatar">{{ user.initials }}</div>
+                      <div class="admin-user__details">
+                        <strong>{{ user.fullName || 'Sans nom' }}</strong>
+                        <span>{{ user.email }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    @if(user.isAdmin)
+                      <span class="admin-role admin-role--admin">
+                        <span class="admin-role__dot"></span>
+                        Administrateur
+                      </span>
+                    @else
+                      <span class="admin-role">
+                        <span class="admin-role__dot"></span>
+                        Utilisateur
+                      </span>
+                    @endif
+                  </td>
+                  <td>
+                    <div class="admin-user__actions">
+                      @if(auth.user.id !== user.id)
+                        @form({ route: 'admin.users.toggle', routeParams: { id: user.id }, method: 'POST' })
+                          <button type="submit" class="btn btn--secondary btn--sm">
+                            {{ user.isAdmin ? 'Retirer admin' : 'Rendre admin' }}
+                          </button>
+                        @end
+                        @form({
+                          route: 'admin.users.destroy',
+                          routeParams: { id: user.id },
+                          method: 'POST',
+                          'onsubmit': "return confirm('Supprimer définitivement ce compte ?')"
+                        })
+                          <button type="submit" class="btn btn--danger btn--sm">Supprimer</button>
+                        @end
+                      @else
+                        <span class="admin-user__current">Votre compte</span>
+                      @endif
+                    </div>
+                  </td>
+                </tr>
+              @end
+            </tbody>
+          </table>
+        </div>
+      @endif
+    </section>
+  @end
+@end
