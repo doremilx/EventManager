@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Event from '#models/event'
 import EventRegistration from '#models/event_registration'
 import { eventValidator } from '#validators/event'
-import { transformEventData } from '#transformers/event_transformer'
+import { transformEventData } from '../transformers/event_transformer.js'
 import db from '@adonisjs/lucid/services/db'
 
 export default class EventsController {
